@@ -8,7 +8,7 @@ function titleClickHandler(event){
   const activeLinks = document.querySelectorAll('.titles a.active');
 
   for(let activeLink of activeLinks){
-  activeLink.classList.remove('active');
+    activeLink.classList.remove('active');
   }
 
   /* B. add class 'active' to the clicked link */
@@ -21,7 +21,7 @@ function titleClickHandler(event){
   const activeArticles = document.querySelectorAll('.posts article.active');
 
   for(let activeArticle of activeArticles){
-  activeArticle.classList.remove('active');
+    activeArticle.classList.remove('active');
   }
 
   /* D. get 'href' attribute from the clicked link */
