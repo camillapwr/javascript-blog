@@ -64,6 +64,7 @@ function generateTitleLinks(){
   }
 
     /* get the article id */
+    const articleID = article.getAttribute('id');
 
     /* find the title element */
 
