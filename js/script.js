@@ -77,12 +77,12 @@ function generateTitleLinks(){
 
     /* insert link into html variable */
     
-    html = html + linkHTML;
+    html = html + linkHTML; /* ??Naszym celem jest stworzenie zmiennej (nie stałej!) o nazwie html, do której będziemy kolejno doklejać wszystkie linki. Wewnątrz pętli nie będziemy ich dodawać do listy. Dopiero po wykonaniu pętli wstawimy do listy kod HTML wszystkich linków naraz. */
 
     console.log(html);
   }
 
-  titleList.innerHTML = html;
+  titleList.innerHTML = html;/* ??Zwróć uwagę, że zmienną html musieliśmy zdefiniować poza pętlą for-of. Inaczej ta zmienna istniałaby tylko na czas jednego "obrotu" pętli. Musieliśmy również zadbać o to, aby była to zmienna let, a nie stała const, abyśmy mogli zmieniać jej wartość. */
   
   const links = document.querySelectorAll('.titles a');
   console.log(links);
@@ -105,7 +105,7 @@ function generateTags(){
 
     /* C. find tags wrapper */
 
-    const titleList = article.querySelector(optArticleTagsSelector);
+    const tagsWrapper = article.querySelector(optArticleTagsSelector);
 
     /* D. make html variable with empty string */
 
@@ -118,17 +118,31 @@ function generateTags(){
 
     /* F. split tags into array */
 
-      /* START LOOP: for each tag */
+    const articleTagsArray = articleTags.split(' ');
+    console.log(articleTagsArray);
 
-      /* generate HTML of the link */
+      /* G. START LOOP: for each tag */
 
-      /* add generated code to html variable */
+      for(let tag of articleTagsArray){
+        console.log(tag);
 
-      /* END LOOP: for each tag */
-    }
-  /* insert HTML of all the links into the tags wrapper */
+        /* H. generate HTML of the link */
+
+        const linkHTML = '<li><a href="#tag-' + tag + '">' + tag + '</a></li>';
+        console.log(linkHTML);
+
+        /* I. add generated code to html variable */
+        html = html + linkHTML;
+        console.log(html);
+
+        /* J. END LOOP: for each tag */
+      }
+
+  /* K. insert HTML of all the links into the tags wrapper */
+    tagsWrapper.innerHTML = html;
 
   /* END LOOP: for every article: */
+    }
 }
 
 generateTags();
