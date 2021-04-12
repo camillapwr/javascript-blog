@@ -18,7 +18,7 @@ function titleClickHandler(event){
 
   /* C. remove class 'active' from all articles */
 
-  const activeArticles = document.querySelectorAll('.posts article.active');
+  const activeArticles = document.querySelectorAll('.post.active');
 
   for(let activeArticle of activeArticles){
     activeArticle.classList.remove('active');
@@ -173,7 +173,7 @@ function tagClickHandler(event){
   /* END LOOP: for each active tag link */
   }
   /* find all tag links with "href" attribute equal to the "href" constant */
-  const tagLinks = querySelectorAll('a[href="' + href + '"]');
+  const tagLinks = document.querySelectorAll('a[href="' + href + '"]');
   
   /* START LOOP: for each found tag link */
   for(let tagLink of tagLinks){
@@ -187,13 +187,18 @@ function tagClickHandler(event){
 }
 
 function addClickListenersToTags(){
-  /* find all links to tags */
+
+  /* find all links to tags , nie wiem jaki selektor??*/ 
+  const links = document.querySelectorAll('optArticleTagsSelector');
 
   /* START LOOP: for each link */
+  for(let link of links){
 
     /* add tagClickHandler as event listener for that link */
+    link.addEventListener('click', tagClickHandler);
 
   /* END LOOP: for each link */
+  }
 }
 
 addClickListenersToTags();
