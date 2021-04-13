@@ -96,7 +96,27 @@ function generateTitleLinks(customSelector = ''){
 
 generateTitleLinks();
 
-/* 6.2 */
+/*6.3 ////////////////////////////////////////////// add NEW function to change tag list in tag cloud  */      
+
+function calculateTagsParams(tags){
+  
+  const params = {
+    max: 0,
+    min: 999999
+  };
+
+  for(let tag in tags){
+    console.log(tag + ' is used ' + tags[tag] + ' times');
+
+    params.max = Math.max(tags[tag], params.max);
+    params.min = Math.min(tags[tag], params.min);
+  }
+
+  return params;
+}
+
+
+/* 6.2 //////////////////////////////////////////GENERATE TAGS*/
 
 function generateTags(){
 
@@ -160,6 +180,10 @@ function generateTags(){
 
   /* [NEW] find list of tags in right column */
   const tagList = document.querySelector('.tags');
+
+  /* [NEW] add this to change tag list in tag cloud */
+  const tagsParams = calculateTagsParams(allTags);
+  console.log('tagParams:', tagsParams);
 
   /* [NEW] create variable for all links HTML code */
   let allTagsHTML = '';
