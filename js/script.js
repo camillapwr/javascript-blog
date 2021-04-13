@@ -45,6 +45,7 @@ const optArticleSelector = '.post',
   optTitleSelector = '.post-title',
   optTitleListSelector = '.titles',
   optArticleTagsSelector = '.post-tags .list',
+  optTagsListSelector = '.tags.list',/*skąd taka nazwa????*/
   optArticleAuthorSelector = '.post-author';
 
 function generateTitleLinks(customSelector = ''){
@@ -98,6 +99,10 @@ generateTitleLinks();
 /* 6.2 */
 
 function generateTags(){
+
+  /* [NEW] create a new variable allTags with an empty array */
+  let allTags = [];
+
   /* A. find all articles *//* B. START LOOP: for every article: */
 
   const articles = document.querySelectorAll(optArticleSelector);
@@ -122,28 +127,40 @@ function generateTags(){
     const articleTagsArray = articleTags.split(' ');
     console.log(articleTagsArray);
 
-      /* G. START LOOP: for each tag */
+    /* G. START LOOP: for each tag */
 
-      for(let tag of articleTagsArray){
-        console.log(tag);
+    for(let tag of articleTagsArray){
+      console.log(tag);
 
-        /* H. generate HTML of the link */
+      /* H. generate HTML of the link */
 
-        const linkHTML = '<li><a href="#tag-' + tag + '">' + tag + '</a></li>';
-        console.log(linkHTML);
+      const linkHTML = '<li><a href="#tag-' + tag + '">' + tag + '</a></li>';
+      console.log(linkHTML);
 
-        /* I. add generated code to html variable */
-        html = html + linkHTML;
-        console.log(html);
+      /* I. add generated code to html variable */
+      html = html + linkHTML;
+      console.log(html);
 
-        /* J. END LOOP: for each tag */
+      /* [NEW] check if this link is NOT already in allTags */
+      if(allTags.indexOf(linkHTML) == -1){
+        /* [NEW] add generated code to allTags array */
+        allTags.push(linkHTML);
       }
 
-  /* K. insert HTML of all the links into the tags wrapper */
+      /* J. END LOOP: for each tag */
+    }
+
+    /* K. insert HTML of all the links into the tags wrapper */
     tagsWrapper.innerHTML = html;
 
   /* END LOOP: for every article: */
-    }
+  }
+
+  /* [NEW] find list of tags in right column */
+  const tagList = document.querySelector('.tags');
+
+  /* [NEW] add html from allTags to tagList */
+  tagList.innerHTML = allTags.join(' ');
 }
 
 generateTags();
@@ -168,11 +185,13 @@ function tagClickHandler(event){
   
   /* START LOOP: for each active tag link */
   for(let activeTag of activeTags){
+
     /* remove class active */
     activeTag.classList.remove('active');
 
   /* END LOOP: for each active tag link */
   }
+
   /* find all tag links with "href" attribute equal to the "href" constant */
   const tagLinks = document.querySelectorAll('a[href="' + href + '"]');
   
@@ -183,6 +202,7 @@ function tagClickHandler(event){
     tagLink.classList.add('active');
   /* END LOOP: for each found tag link */
   }
+
   /* ???execute function "generateTitleLinks" with article selector as argument */
   generateTitleLinks('[data-tags~="' + tag + '"]');
 }
