@@ -46,7 +46,11 @@ const optArticleSelector = '.post',
   optTitleListSelector = '.titles',
   optArticleTagsSelector = '.post-tags .list',
   optTagsListSelector = '.tags.list',/*skąd taka nazwa????*/
-  optArticleAuthorSelector = '.post-author';
+  optArticleAuthorSelector = '.post-author',
+  optAuthorsListSelector = '.authors.list',
+  optCloudClassCount = 4,
+  optCloudClassPrefix = 'tag-size-';
+
 
 function generateTitleLinks(customSelector = ''){
 
@@ -115,6 +119,20 @@ function calculateTagsParams(tags){
   return params;
 }
 
+function calculateTagsClass(count, params){
+
+  const normalizedCount = count - params.min;
+
+  const normalizedMax = params.max - params.min;
+
+  const percentage = normalizedCount / normalizedMax;
+
+  const classNumber = Math.floor( percentage * (optCloudClassCount - 1) + 1 );
+
+  return optCloudClassPrefix + classNumber;
+
+
+}
 
 /* 6.2 //////////////////////////////////////////GENERATE TAGS*/
 
@@ -132,15 +150,16 @@ function generateTags(){
     /* C. find tags wrapper */
 
     const tagsWrapper = article.querySelector(optArticleTagsSelector);
+    console.log(tagsWrapper); /*wyszykuje miejsce w artykule dla listy tagow, wrappera w ktorym jest juz ul i zostanie za chwile stworzona lista tagow li, na dole kazdego wyswietlanego artykulu*/
 
     /* D. make html variable with empty string */
 
     let html = '';
-
+    
     /* E. get tags from data-tags attribute */
 
     const articleTags = article.getAttribute('data-tags');
-    console.log(articleTags);
+    console.log(articleTags);//funcja wydobyla wszystkie slowa kluczowe(tagi) z kazdego artykulu
 
     /* F. split tags into array */
 
@@ -159,7 +178,7 @@ function generateTags(){
 
       /* I. add generated code to html variable */
       html = html + linkHTML;
-      console.log(html);
+  
 
       /* [NEW] check if this link is NOT already in allTags */
       if(!allTags.hasOwnProperty(tag)){
@@ -168,18 +187,21 @@ function generateTags(){
       } else {
         allTags[tag]++;
       }
+      console.log(allTags[tag]);
 
       /* J. END LOOP: for each tag */
     }
 
     /* K. insert HTML of all the links into the tags wrapper */
     tagsWrapper.innerHTML = html;
-
-  /* END LOOP: for every article: */
+    console.log(tagsWrapper);/* wklejamy nowoutworzony kod HTML do wczesniej przydotowanego wrapera */
+  
+    /* END LOOP: for every article: */
   }
 
   /* [NEW] find list of tags in right column */
-  const tagList = document.querySelector('.tags');
+  const tagList = document.querySelector(optTagsListSelector);
+  console.log(tagList);
 
   /* [NEW] add this to change tag list in tag cloud */
   const tagsParams = calculateTagsParams(allTags);
@@ -191,8 +213,13 @@ function generateTags(){
   /* [NEW] START LOOP: for each tag in allTags: */
   for(let tag in allTags){
 
-    /* [NEW] generate code of a link and add it to allTagsHTML */
-    allTagsHTML += tag + ' (' + allTags[tag] + ') ';
+    /* [NEW]/?????NEW CHANGE generate code of a link and add it to allTagsHTML */
+    const tagLinkHTML = calculateTagsClass(allTags[tag], tagsParams);
+    console.log('tagLinkHTML:' , tagLinkHTML);
+
+    allTagsHTML += '<li><a href="#tag-' + tag + '" class ="' + tagLinkHTML + '">' + tag + '</a> ' + allTags[tag] + '</li>';
+    console.log(allTagsHTML);
+
 
   /* [NEW] END LOOP: for each tag in allTags: */
   }
