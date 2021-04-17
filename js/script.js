@@ -111,7 +111,7 @@ function calculateTagsParams(tags){
     min: 999999
   };
 
-  for(let tag in tags){
+  for(let tag in tags){///dlaczego jest in a nie of
     console.log(tag + ' is used ' + tags[tag] + ' times');
 
     params.max = Math.max(tags[tag], params.max);
@@ -219,7 +219,7 @@ function generateTags(){
     const tagLinkHTML = calculateTagsClass(allTags[tag], tagsParams);
     console.log('tagLinkHTML:' , tagLinkHTML);
 
-    allTagsHTML += '<li><a href="#tag-' + tag + '" class ="' + tagLinkHTML + '">' + tag + '</a> ' + allTags[tag] + '</li>';
+    allTagsHTML += '<li><a href="#tag-' + tag + '" class ="' + tagLinkHTML + '">' + tag + '</a> </li>';
     console.log(allTagsHTML);
 
 
