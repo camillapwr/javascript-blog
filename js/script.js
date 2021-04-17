@@ -49,7 +49,9 @@ const optArticleSelector = '.post',
   optArticleAuthorSelector = '.post-author',
   optAuthorsListSelector = '.authors.list',
   optCloudClassCount = 4,
-  optCloudClassPrefix = 'tag-size-';
+  optCloudClassPrefix = 'tag-size-',
+  optAuthorClassCount = 4,
+  optAuthorClassPrefix = 'author-size-';
 
 
 function generateTitleLinks(customSelector = ''){
@@ -205,7 +207,7 @@ function generateTags(){
 
   /* [NEW] add this to change tag list in tag cloud */
   const tagsParams = calculateTagsParams(allTags);
-  console.log('tagParams:', tagsParams);
+  console.log('tagsParams:', tagsParams);
 
   /* [NEW] create variable for all links HTML code */
   let allTagsHTML = '';
@@ -288,32 +290,118 @@ function addClickListenersToTags(){
 
 addClickListenersToTags();
 
+///////// ADD NEW FUNCTIONS TO COUNT NUMBER OF OCCURENCES FOR AUTHORS
+
+function calculateAuthorsParams(authors){
+  
+  const params = {
+    max: 0,
+    min: 999999
+  };
+
+  for(let author in authors){
+    console.log(author + ' is used ' + authors[author] + ' times');
+
+    params.max = Math.max(authors[author], params.max);
+    params.min = Math.min(authors[author], params.min);
+  }
+
+  return params;
+}
+
+function calculateAuthorsClass(count, params){
+
+  const normalizedCount = count - params.min;
+
+  const normalizedMax = params.max - params.min;
+
+  const percentage = normalizedCount / normalizedMax;
+
+  const classNumber = Math.floor( percentage * (optAuthorClassCount - 1) + 1 );
+
+  return optAuthorClassPrefix + classNumber;
+
+
+}
+
+/////////  GENERATE AUTHORS   /////////////////
+
 function generateAuthors(){
+
+  /* [NEW to create right sidebar] */
+
+  let allAuthors = {};
+
+
   /*find all articles and start loop for every article*/
   const articles = document.querySelectorAll(optArticleSelector);
+  
   for(let article of articles){
 
     /* find author wrapper(list)*/
-    const authorList = article.querySelector(optArticleAuthorSelector);
+    const authorsWrapper = article.querySelector(optArticleAuthorSelector);
+    console.log(authorsWrapper);
 
     /* make html variable with empty string */
     let html = '';
+
     /* get authot from data-author */
     const articleAuthor = article.getAttribute('data-author');
+
     /* generate HTML of the link */
-    const linkHTML = '<li><a href = "#author-' + articleAuthor + '"<span>' + articleAuthor + '</span></a></li>';
+    const linkHTML = '<a href = "#author-' + articleAuthor + '"<span>' + articleAuthor + '</span></a>';
+    
     /*add generated html code to html variable */
     html = html + linkHTML;
 
-    /*insert HTML of all the links into the authorList */
-    authorList.innerHTML = html;
+    if(!allAuthors.hasOwnProperty(articleAuthor)){
+      allAuthors[articleAuthor] = 1;
+    } else {
+      allAuthors[articleAuthor]++;
+    }
+
+    /*insert HTML of all the links into the authorsWrapper */
+    authorsWrapper.innerHTML = html;
+    console.log(authorsWrapper);
+
     /*END LOOP */
   }
+
+
+  /* [NEW] find list of authors in right column */
+  const authorList = document.querySelector(optAuthorsListSelector);
+  console.log(authorList);
+
+  /* [NEW]*/
+  const authorsParams = calculateAuthorsParams(allAuthors);
+  console.log('authorsParams:', authorsParams);
+
+  /* [NEW] create variable for all links HTML code */
+  let allAuthorsHTML = '';
+  
+  /* [NEW] START LOOP: for each author in allAuthors: */
+  for(let articleAuthor in allAuthors){
+
+    /* [NEW] generate code of a link and add it to allAuthorsHTML */
+    const authorLinkHTML = calculateAuthorsClass(allAuthors[articleAuthor], authorsParams);
+    //console.log('authorLinkHTML:' , authorLinkHTML);
+
+    allAuthorsHTML += '<li><a href="#author-' + articleAuthor + '" class ="' + authorLinkHTML + '">' + articleAuthor + '</a> ' + allAuthors[articleAuthor] + '</li>';
+    console.log(allAuthorsHTML);
+
+
+  /* [NEW] END LOOP: for each tag in allAuthors: */
+  }
+
+  /* [NEW] add html from allAuthorsHTML to authorList*/
+  authorList.innerHTML = allAuthorsHTML;
 }
+
 generateAuthors();
 
 
 function authorClickHandler(event){
+  
   /* prevent default action for this event */
   event.preventDefault();
 
