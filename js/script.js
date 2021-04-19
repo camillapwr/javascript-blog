@@ -47,7 +47,7 @@ function titleClickHandler(event){
   targetArticle.classList.add('active');
 }
 
-/*5.4*/
+//////////////////     /*5.4*/       //////////////////////////
 
 const optArticleSelector = '.post',
   optTitleSelector = '.post-title',
@@ -69,8 +69,7 @@ function generateTitleLinks(customSelector = ''){
   const titleList = document.querySelector(optTitleListSelector);
   titleList.innerHTML = '';
 
-  /* for each article */
-  /* find all the articles and save them to variable: articles */
+  /* find all the articles */
 
   const articles = document.querySelectorAll(optArticleSelector + customSelector);
   
@@ -111,7 +110,7 @@ function generateTitleLinks(customSelector = ''){
 
 generateTitleLinks();
 
-/*6.3 ////////////////////////////////////////////// add NEW function to change tag list in tag cloud  */      
+//////////////////////       /*6.3 /////       add NEW function to change tag list into tag cloud  */      
 
 function calculateTagsParams(tags){
   
@@ -145,14 +144,14 @@ function calculateTagsClass(count, params){
 
 }
 
-/* 6.2 //////////////////////////////////////////GENERATE TAGS*/
+/////////////////////* 6.2 /////////    GENERATE TAGS      *//////////////////////////////
 
 function generateTags(){
 
   /* [NEW] create a new variable allTags with an empty object */
   let allTags = {};
 
-  /* A. find all articles *//* B. START LOOP: for every article: */
+  /* A. find all articles */
 
   const articles = document.querySelectorAll(optArticleSelector);
   
@@ -215,7 +214,7 @@ function generateTags(){
   const tagList = document.querySelector(optTagsListSelector);
   console.log(tagList);
 
-  /* [NEW] add this to change tag list in tag cloud */
+  /* [NEW] add this to change tag list into tag cloud */
   const tagsParams = calculateTagsParams(allTags);
   console.log('tagsParams:', tagsParams);
 
@@ -225,15 +224,13 @@ function generateTags(){
   /* [NEW] START LOOP: for each tag in allTags: */
   for(let tag in allTags){
 
-    // REMOVE FOR [HANDLEBARS]const tagLinkHTML = calculateTagsClass(allTags[tag], tagsParams);
-
-    //[HANDLEBARS]allTagsHTML += '<li><a href="#tag-' + tag + '" class ="' + tagLinkHTML + '">' + tag + '</a> </li>';
+    /* REMOVE FOR [HANDLEBARS]const tagLinkHTML = calculateTagsClass(allTags[tag], tagsParams);
+    //allTagsHTML += '<li><a href="#tag-' + tag + '" class ="' + tagLinkHTML + '">' + tag + '</a> </li>';*/
     allTagsData.tags.push({
       tag: tag,
       count: allTags[tag],
       className: calculateTagsClass(allTags[tag], tagsParams)
     });
-
 
   /* [NEW] END LOOP: for each tag in allTags: */
   }
@@ -245,11 +242,7 @@ function generateTags(){
 generateTags();
 
 function tagClickHandler(event){
-
-  /* prevent default action for this event */
   event.preventDefault();
-
-  /* make new constant named "clickedElement" and give it the value of "this" */
   const clickedElement = this;
   console.log('Tag was clicked');
 
@@ -345,7 +338,6 @@ function generateAuthors(){
 
   let allAuthors = {};
 
-
   /*find all articles and start loop for every article*/
   const articles = document.querySelectorAll(optArticleSelector);
   
@@ -381,8 +373,7 @@ function generateAuthors(){
     /*END LOOP */
   }
 
-
-  /* [NEW] find list of authors in right column */
+  /* [NEW] find summary list of authors in right column */
   const authorList = document.querySelector(optAuthorsListSelector);
   console.log(authorList);
 
@@ -410,7 +401,7 @@ function generateAuthors(){
   /* [NEW] END LOOP: for each tag in allAuthors: */
   }
 
-  /* [NEW] add html from allAuthorsHTML to authorList*/
+  /* [HANDLEBARS]*/
   authorList.innerHTML = templates.authorListLink(allAuthorsData);
 }
 
@@ -418,11 +409,8 @@ generateAuthors();
 
 
 function authorClickHandler(event){
-  
-  /* prevent default action for this event */
-  event.preventDefault();
 
-  /* make new constant named "clickedElement" and give it the value of "this" */
+  event.preventDefault();
   const clickedElement = this;
   console.log('Author was clicked');
 
